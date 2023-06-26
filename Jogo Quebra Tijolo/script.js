@@ -1,8 +1,9 @@
+
 //Definir área do canvas
 var canvas = document.getElementById("gameCanvas");
-var desenho = canvas.getContext("2d");
+var desenho = canvas.getContext("2d"); 
 
-//configurar raquete
+//configurar raquete 
 var raqueteAltura = 10;
 var raqueteLargura = 70;
 var raqueteX = (canvas.width - raqueteLargura) / 2; //centralizar raquete
