@@ -10,7 +10,8 @@ var raqueteX = (canvas.width - raqueteLargura) / 2; //centralizar raquete
 var velocidadeRaquete = 7;
 
 //configurar a bola
-var bolaRadius = 10;
+var bolaRadius = 10; 
+
 var bolaX = canvas.width / 2;
 var bolaY = canvas.height - 30;
 var bolaDX = 2;                   //direção de bola em X (esquerda/direita)
