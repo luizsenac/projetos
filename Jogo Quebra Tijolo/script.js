@@ -28,21 +28,92 @@ var tijolos = []; //lista com os tijolos
 
 var totalPontuacao = tijolosPorLinha * tijolosPorColuna * 10;
 var pontuacao = 0;
+var modoImpossivel = false;
+
+function facil(){
+    raqueteLargura = 90;
+    tijolosPorLinha = 4;
+    tijolosPorColuna = 8;
+    tijoloLargura = 60;
+    tijoloAltura = 20;
+    bolaRadius = 15;    //tamanho da bola
+    bolaDX = 1;         //velocidade da bola direita/esquerda
+    bolaDY = -2;        //velocidade da bola acima/abaixo
+    totalPontuacao = tijolosPorLinha * tijolosPorColuna * 10;
+    pontuacao = 0;
+    bolaX = canvas.width / 2;
+    bolaY = canvas.height - 30;
+    iniciarTijolos();
+    modoImpossivel = false;
+    
+}
+function medio(){
+    raqueteLargura = 70;
+    tijolosPorLinha = 5;
+    tijolosPorColuna = 9;
+    tijoloLargura = 50;
+    tijoloAltura = 15;
+    bolaRadius = 7;    //tamanho da bola
+    bolaDX = 2;         //velocidade da bola direita/esquerda
+    bolaDY = -3;        //velocidade da bola acima/abaixo
+    totalPontuacao = tijolosPorLinha * tijolosPorColuna * 10;
+    pontuacao = 0;
+    bolaX = canvas.width / 2;
+    bolaY = canvas.height - 30;
+    iniciarTijolos();
+    modoImpossivel = false;
+}
+function dificil(){
+    raqueteLargura = 70;
+    tijolosPorLinha = 7;
+    tijolosPorColuna = 11;
+    tijoloLargura = 40;
+    tijoloAltura = 10;
+    bolaRadius = 5;    //tamanho da bola
+    bolaDX = 2;         //velocidade da bola direita/esquerda
+    bolaDY = -3;        //velocidade da bola acima/abaixo
+    totalPontuacao = tijolosPorLinha * tijolosPorColuna * 10;
+    pontuacao = 0;
+    bolaX = canvas.width / 2;
+    bolaY = canvas.height - 30;
+    iniciarTijolos();
+    modoImpossivel = false;
+}
 
 
+function impossivel(){
+    raqueteLargura = 70;
+    tijolosPorLinha = 14;
+    tijolosPorColuna = 22;
+    tijoloLargura = 20;
+    tijoloAltura = 5;
+    bolaRadius = 5;    //tamanho da bola
+    bolaDX = 1;         //velocidade da bola direita/esquerda
+    bolaDY = -1;        //velocidade da bola acima/abaixo
+    totalPontuacao = tijolosPorLinha * tijolosPorColuna * 10;
+    pontuacao = 0;
+    bolaX = canvas.width / 2;
+    bolaY = canvas.height - 30;
+    iniciarTijolos();
+    modoImpossivel = true;
+}
 
-//dedicado apena a inicialização dos tijolos
-for (var coluna = 0; coluna < tijolosPorColuna; coluna++) {
-    tijolos[coluna] = []  //0 1 2 3 4 5
 
-    for (var linha = 0; linha < tijolosPorLinha; linha++) {
+function iniciarTijolos(){
+   //dedicado apena a inicialização dos tijolos
+    for (var coluna = 0; coluna < tijolosPorColuna; coluna++) {
+        tijolos[coluna] = []  //0 1 2 3 4 5
 
-        tijolos[coluna][linha] = { x: 5, y: 5, ativo: 1 }
-        //x é a posição esquerda/direita no canva
-        //y é a posição acima/abaixo no canva
-        //ativo, determina se o tijolo aparece ou não, 1 ou 0
+        for (var linha = 0; linha < tijolosPorLinha; linha++) {
+
+            tijolos[coluna][linha] = { x: 5, y: 5, ativo: 1 }
+            //x é a posição esquerda/direita no canva
+            //y é a posição acima/abaixo no canva
+            //ativo, determina se o tijolo aparece ou não, 1 ou 0
+        }
     }
 }
+iniciarTijolos();
 
 var setaDireita = false;
 var setaEsquerda = false;
@@ -131,9 +202,15 @@ function detectarColisao() {
                         tela = document.getElementById("ponto");
                         pontuacao = pontuacao + 10;
                         tela.innerHTML = "Score: "+ pontuacao;
+                        gerarEfeitoSonoro('moeda.mp3');
+                        if(modoImpossivel === true){
+                            bolaDY = bolaDY + 0.05;
+                            bolaDX = bolaDX - 0.05;
+
+                        }
           
                         if(pontuacao === totalPontuacao){
-                            window.location.reload();
+                           vitoria();
                         }
                  }
             }
@@ -144,10 +221,46 @@ function detectarColisao() {
 function gameover(){
     var gameover = document.getElementById("gameover");
     gameover.style.display = "block";
+    bolaDX = 0;
+    bolaDY = 0;
+    gerarEfeitoSonoro("gameover.mp3");
 }
 
 function reiniciar(){
     document.location.reload();
+}
+
+//exibir na tela mensagem de vitória
+function vitoria(){
+    var mensagem = document.getElementById("vitoria");
+    mensagem.style.display = "block";
+    bolaDX = 0;
+    bolaDY = 0;
+    gerarEfeitoSonoro("vitoria.mp3");
+}
+
+
+function gerarEfeitoSonoro(som){
+
+    //cria contexto de audio
+    var contexto = new (window.AudioContext)();
+    //fazer uma requisição para carregar o arquivo de som
+    var requisicao = new XMLHttpRequest();
+    requisicao.open('GET',som,true);
+    requisicao.responseType = 'arraybuffer'; //armazenar na memoria
+
+    requisicao.onload = function(){
+        //decoficar o arquivo de som 
+        contexto.decodeAudioData(requisicao.response, function(buffer) {
+            //reprodução do som no navegador
+            var fonte = contexto.createBufferSource();
+            fonte.buffer  = buffer;
+            //conectar a saida de som
+            fonte.connect(contexto.destination);
+            fonte.start(0);     //executa som
+        });
+    }
+    requisicao.send();
 }
 
 
@@ -162,23 +275,22 @@ function desenhar() {
     //analisar colisao eixo X, colisao canto direita/esquerdo
     if (bolaX + bolaDX > canvas.width - bolaRadius || bolaX + bolaDX < bolaRadius) {
         bolaDX = - bolaDX; //inverte direcao direita/esquerda
+        gerarEfeitoSonoro('bordas.mp3');
     }
     //analisa colisao com parte de cima
     if (bolaY + bolaDY < bolaRadius) {
         bolaDY = -bolaDY; //inverte colisao ao bater em cima
-
+        gerarEfeitoSonoro('bordas.mp3');
     } else if (bolaY + bolaDY > canvas.height - bolaRadius - raqueteAltura) {
-
         //se for maior que o começo da raquete e menor que o final da raquete
         if (bolaX > raqueteX && bolaX < raqueteX + raqueteLargura) {
             bolaDY = -bolaDY;           //inverte direção
+            gerarEfeitoSonoro('raquete.mp3');
         } else {
             // document.location.reload(); //reinicia
             gameover();
         }
     }
-
-    
     //se setaDireita estiver ativo &&"e" raqueteX < largura dp canvas - raqueteLargura
     if (setaDireita === true && raqueteX < canvas.width - raqueteLargura) {
         raqueteX = raqueteX + velocidadeRaquete;    //anda para direita
@@ -187,15 +299,9 @@ function desenhar() {
     } else if (setaEsquerda === true && raqueteX > 0) {
         raqueteX = raqueteX - velocidadeRaquete;    //anda para esquerda
     }
-
     bolaX = bolaX + bolaDX; // faz bola andar para direita/esquerda
     bolaY = bolaY + bolaDY; // faz a bola andar para cima/baixo
 
-
-
-
-    
-    requestAnimationFrame(desenhar) //atualizar tela de forma suave
+    requestAnimationFrame(desenhar); //atualizar tela de forma suave
 }
-
 desenhar(); //chama função desenhar
