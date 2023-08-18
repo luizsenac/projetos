@@ -1,0 +1,47 @@
+body{
+    background-color: cornflowerblue;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+/*     
+    centralizando com grid
+    display: grid;
+    place-items: center;
+  */
+  /* centralizando com frexbox; */
+  /* display: flex;
+  justify-content: flex-start;
+  align-content: flex-end; */
+
+}
+.painel{
+    background-color: white;
+    width: 600px;
+    min-height: 350px;
+    text-align: center;
+    margin: 30px auto;
+    border-radius: 20px;
+    border: 1px solid gray;
+    box-shadow: 2px 2px 15px black;
+    padding-top: 50px;
+
+}
+
+img{
+    width: 200px;
+    border-radius: 40px;
+}
+
+ul{
+    list-style: none;
+    margin-right: 60px;
+}
+
+button {
+    background-color: cornflowerblue;
+    border: none;
+    padding: 3px;
+    border-radius: 5px;
+    color: white;
+}
+button:hover{
+    background-color: blue;
+}
