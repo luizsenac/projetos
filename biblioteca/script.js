@@ -1,4 +1,3 @@
-//orientação a objetos
 class Livro {
     //classe livro, 
     constructor(titulo, autor){ 
@@ -7,6 +6,7 @@ class Livro {
      }
 }
 
+//teste
 //classe gerenciamento, responsável por gerenciar os elementos em tela
 class gerenciamento {
     constructor(){
