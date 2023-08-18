@@ -1,4 +1,4 @@
-
+//orientação a objetos
 class Livro {
     //classe livro, 
     constructor(titulo, autor){ 
@@ -28,7 +28,7 @@ class gerenciamento {
         titulo.value = '';  //limpar campo titulo
         autor.value = '';   //limpar campo autor
     }
-    
+
     exibirTela(){
         this.listagem.innerHTML = ''; //limpa lista
         for(var i=0; i < this.livros.length; i++ ){ //percorrer toda lista de livros
